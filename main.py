@@ -1,3 +1,11 @@
+# SQL Library and Pandas Library
+import pandas as pd
+import sqlite3
+
+# Connect to the database
+conn = sqlite3.connect('data.sqlite')
+
+pd.read_sql("""SELECT * FROM sqlite_master""", conn)
 # Step 1: Employees in Boston
 df_boston = pd.read_sql("""
     SELECT firstName, lastName, jobTitle
