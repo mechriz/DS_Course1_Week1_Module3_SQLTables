@@ -8,7 +8,7 @@ conn = sqlite3.connect('data.sqlite')
 pd.read_sql("""SELECT * FROM sqlite_master""", conn)
 # Step 1: Employees in Boston
 df_boston = pd.read_sql("""
-    SELECT firstName, lastName, jobTitle
+    SELECT firstName, lastName
     FROM employees
     WHERE officeCode IN (SELECT officeCode FROM offices WHERE city = 'Boston')
 """, conn)
@@ -95,12 +95,11 @@ df_under_20 = pd.read_sql("""
     JOIN orders ord ON c.customerNumber = ord.customerNumber
     JOIN orderdetails od ON ord.orderNumber = od.orderNumber
     WHERE od.productCode IN (
-        SELECT p.productCode
-        FROM products p
-        JOIN orderdetails od2 ON p.productCode = od2.productCode
+        SELECT od2.productCode
+        FROM orderdetails od2
         JOIN orders o2 ON od2.orderNumber = o2.orderNumber
-        GROUP BY p.productCode
+        GROUP BY od2.productCode
         HAVING COUNT(DISTINCT o2.customerNumber) < 20
     )
+    ORDER BY e.firstName
 """, conn)
-
